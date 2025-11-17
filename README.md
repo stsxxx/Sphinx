@@ -51,13 +51,6 @@ python pipeline.py \
   dataset/view_sampler=evaluation \
   > 95_experiment.txt
 ```
-
-## Latency Statistics
-```bash
-python stats.py --dir ./sphinx_output_98
-python stats.py --dir ./sphinx_output_95
-```
-
 Generated results are written to: sphinx_output_98 and sphinx_output_95
 
 ```text
@@ -68,5 +61,13 @@ sphinx_output_98/
         ├── samples-rgb/       # Sphinx (SEVA) frames
         ├── mvsplat.mp4        # MVSplat video
         └── samples-rgb.mp4    # Sphinx video
+```
+
+
+
+## Latency Statistics
+```bash
+python stats.py --dir ./sphinx_output_98
+python stats.py --dir ./sphinx_output_95
 ```
 
