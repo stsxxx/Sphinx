@@ -52,6 +52,12 @@ python pipeline.py \
   > 95_experiment.txt
 ```
 
+## Latency Statistics
+```bash
+python stats.py --dir ./sphinx_output_98
+python stats.py --dir ./sphinx_output_95
+```
+
 Generated results are written to: sphinx_output_98 and sphinx_output_95
 
 ```text
