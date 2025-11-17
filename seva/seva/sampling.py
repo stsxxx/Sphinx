@@ -612,7 +612,7 @@ class EulerEDMSampler(object):
             # print("cache latents:", cache_latents)
             # print("cache_latents shapes:", [t.shape if t is not None else None for t in cache_latents])
             
-            if i % 5 == 0 or i > 40:
+            if i % 5 == 0 or i >= 40:
                 run_mask = None
                 x_scaled, cache_latents = self.sampler_step_finer(
                     s_in * sigmas[i],
