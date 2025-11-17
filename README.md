@@ -56,9 +56,11 @@ Generated results are written to: sphinx_output_98 and sphinx_output_95
 
 ```text
 sphinx_output_98/
-├── <scene_id>/
-│   └── pipeline/
-│       ├── mvsplat/         # Baseline MVSplat outputs
-│       └── samples-rgb/     # Sphinx (SEVA) outputs
+└── <scene_id>/
+    └── pipeline/
+        ├── mvsplat/           # MVSplat frames
+        ├── samples-rgb/       # Sphinx (SEVA) frames
+        ├── mvsplat.mp4        # MVSplat video
+        └── samples-rgb.mp4    # Sphinx video
 ```
 
