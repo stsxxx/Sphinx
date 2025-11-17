@@ -26,7 +26,10 @@ conda activate sphinx_seva
 
 
 ## Download test cases
-
+```bash
+pip install --upgrade --no-deps gdown 
+gdown --folder --remaining-ok https://drive.google.com/drive/folders/1_ThCxGN9MDg7nhQXfrlhWz14KWdOM_kv
+```
 
 ## Run Experiments
 ```bash
@@ -51,10 +54,11 @@ python pipeline.py \
 
 Generated results are written to: sphinx_output_98 and sphinx_output_95
 
+```text
 sphinx_output_98/
 ├── <scene_id>/
 │   └── pipeline/
 │       ├── mvsplat/         # Baseline MVSplat outputs
 │       └── samples-rgb/     # Sphinx (SEVA) outputs
-
+```
 
