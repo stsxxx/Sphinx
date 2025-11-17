@@ -889,7 +889,7 @@ def main(
             k_decision_curve = np.array([decide_k_curve(float(x), rules[best_idx]) for x in x_ratio], dtype=int).tolist()
             min_k = min(k_decision_curve)
             if masked_area == 0.0:
-                k_decision_curve = VERSION_DICT["T"]
+                k_decision_curve = [40] * VERSION_DICT["T"]
                 print("k:", k_decision_curve)
             else:
                 k_decision_curve = [min_k] + k_decision_curve + [min_k]
