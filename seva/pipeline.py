@@ -836,10 +836,7 @@ def main(
 
             sims = centers @ f_vec    
             best_idx = sims.argmax().item()   
-
-            
-            
-            binary_mask = ((binary_mask + blur_mask) > 0).float()
+            binary_mask = ((binary_mask + blur_mask) > 0).float() if best_idx != 1 else (binary_mask > 0).float
 
             
             coherent_mask = binary_mask.any(dim=0).unsqueeze(0).float()
