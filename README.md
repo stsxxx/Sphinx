@@ -71,3 +71,8 @@ python stats.py --dir ./sphinx_output_98
 python stats.py --dir ./sphinx_output_95
 ```
 
+
+
+## Disclaimer
+
+This “research quality code” is for Non-Commercial purposes and provided by the contributors “As Is” without any express or implied warranty of any kind. The organizations (University of Illinois Urbana-Champaign or University of Michigan or Intel) involved do not own the rights to the data sets used or generated and do not confer any rights to it. The organizations (University of Illinois Urbana-Champaign or University of Michigan or Intel) do not warrant or assume responsibility for the accuracy or completeness of any information, text, graphics, links or other items within the code. A thorough security or ethical review has not been performed on this code. Additionally, this repository may contain components that are out of date or contain known security vulnerabilities.
