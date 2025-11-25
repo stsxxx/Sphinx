@@ -71,6 +71,19 @@ python stats.py --dir ./sphinx_output_98
 python stats.py --dir ./sphinx_output_95
 ```
 
+## Citation
+
+If this work is helpful, please cite as:
+
+@misc{xia2025sphinxefficientlyservingnovel,
+      title={Sphinx: Efficiently Serving Novel View Synthesis using Regression-Guided Selective Refinement}, 
+      author={Yuchen Xia and Souvik Kundu and Mosharaf Chowdhury and Nishil Talati},
+      year={2025},
+      eprint={2511.18672},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2511.18672}, 
+}
 
 
 ## Disclaimer
