@@ -3,15 +3,7 @@
 **Sphinx** is a fast, high-quality **Novel View Synthesis (NVS)** system combining a lightweight regression model with selective diffusion-based refinement.  
 
 
-## Install Latent Gaussian Rasterizer
-
-```bash
-git clone https://github.com/Chrixtar/latent-gaussian-rasterization.git
-cd latent-gaussian-rasterization
-pip install -e .
-```
-
-## Return to SEVA repo
+## SEVA Experiments
 
 ```bash
 cd ../seva
@@ -22,6 +14,14 @@ We are using Python 3.10.16 and CUDA 11.8
 ```bash
 conda env create -f environment.yaml
 conda activate sphinx_seva
+```
+
+## Install Latent Gaussian Rasterizer
+
+```bash
+git clone https://github.com/Chrixtar/latent-gaussian-rasterization.git
+cd latent-gaussian-rasterization
+pip install -e .
 ```
 
 
