@@ -33,6 +33,15 @@ gdown --folder --remaining-ok https://drive.google.com/drive/folders/1_ThCxGN9MD
 
 ## Run Experiments
 ```bash
+# Baseline(pure diffusion)
+python pipeline_baseline.py \
+  --config-name=main_baseline \
+  +experiment=re10k \
+  checkpointing.load=mvsplat/checkpoints/re10k.ckpt \
+  mode=test \
+  dataset/view_sampler=evaluation \
+  > baseline_experiment.txt
+
 # quality factor = 0.98
 python pipeline.py \
   --config-name=main_98 \
@@ -51,7 +60,7 @@ python pipeline.py \
   dataset/view_sampler=evaluation \
   > 95_experiment.txt
 ```
-Generated results are written to: sphinx_output_98 and sphinx_output_95
+Generated results are written to: sphinx_output_baseline, sphinx_output_98 and sphinx_output_95
 
 ```text
 sphinx_output_98/

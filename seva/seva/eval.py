@@ -1558,11 +1558,18 @@ def run_one_scene(
             save_path=os.path.join(save_path, "input"),
             video_save_fps=2,
         )
-        save_output(
-            {"/image": test_imgs},
-            save_path=os.path.join(save_path, "mvsplat"),
-            video_save_fps=options.get("video_save_fps", 6),
-        )
+        if (isinstance(s, int) and s != 0) or isinstance(s, list):
+            save_output(
+                {"/image": test_imgs},
+                save_path=os.path.join(save_path, "mvsplat"),
+                video_save_fps=options.get("video_save_fps", 6),
+            )
+        else:
+            save_output(
+                {"/image": test_imgs},
+                save_path=os.path.join(save_path, "groundtruth"),
+                video_save_fps=options.get("video_save_fps", 6),
+            )
 
     if not use_traj_prior:
         chunk_strategy = options.get("chunk_strategy", "gt")

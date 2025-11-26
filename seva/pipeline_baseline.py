@@ -68,60 +68,6 @@ import open_clip
 
 device = "cuda:0"
 
-rules_98 = [
-    [ 
-        (0.50, 0.70, 5),
-        (0.70, 0.80, 10),
-        (0.80, 0.88, 15),
-        (0.88, 0.95, 20),
-        (0.95, 1.00, 25),
-    ],
-    [  
-
-        (0.71, 0.77, 5),
-        (0.77, 0.84, 10),
-        (0.84, 0.90, 15),
-        (0.90, 0.97, 20),
-        (0.97, 1.00, 25),
-    ],
-    [   
-
-        (0.60, 0.73, 5),
-        (0.73, 0.88, 10),
-        (0.88, 0.96, 15),
-        (0.96, 1.00, 20),
-    ],
-]
-
-
-rules_95 = [
-    [ 
-        (0.43, 0.65, 10),
-        (0.65, 0.78, 15),
-        (0.78, 0.88, 20),
-        (0.88, 0.94, 25),
-        (0.94, 0.98, 30),
-        (0.98, 1.00, 35),
-    ],
-    [   
-
-        (0.54, 0.74, 15),
-        (0.74, 0.84, 20),
-        (0.84, 0.94, 30),
-        (0.94, 1.00, 35),
-    ],
-    [  
-
-        (0.58, 0.68, 5),
-        (0.68, 0.76, 10),
-        (0.76, 0.84, 15),
-        (0.84, 0.90, 20),
-        (0.90, 0.96, 25),
-        (0.96, 1.00, 30),
-    ]
-]
-
-rules_set = {"98": rules_98, "95": rules_95}
 
 # Constants.
 WORK_DIR = "work_dirs/demo"
@@ -669,8 +615,8 @@ def main(
     baseline_dir = Path(cfg_dict.seva.baseline_path)
     task = cfg_dict.seva.task
     use_traj_prior=False
-    quality_factor = cfg_dict.seva.quality_factor
-    rules = rules_set[str(quality_factor)]
+    # quality_factor = cfg_dict.seva.quality_factor
+    # rules = rules_set[str(quality_factor)]
     
     
 
@@ -709,35 +655,35 @@ def main(
 
 
 
-    model_name = "ViT-B-32"
-    pretrained = "laion2b_s34b_b79k"
-    clip_model, _, preprocess = open_clip.create_model_and_transforms(
-        model_name, pretrained=pretrained, device=device
-    )
-    clip_model.eval()
+    # model_name = "ViT-B-32"
+    # pretrained = "laion2b_s34b_b79k"
+    # clip_model, _, preprocess = open_clip.create_model_and_transforms(
+    #     model_name, pretrained=pretrained, device=device
+    # )
+    # clip_model.eval()
     
-    path = "./cluster_centers.npy"
-    centers_np = np.load(path)
-    centers = torch.from_numpy(centers_np).float().to(device)
+    # path = "./cluster_centers.npy"
+    # centers_np = np.load(path)
+    # centers = torch.from_numpy(centers_np).float().to(device)
 
     
-    # mvsplat part
-    encoder, encoder_visualizer = get_encoder(cfg.model.encoder)
-    step_tracker = StepTracker()
-    model_kwargs = {
-        "optimizer_cfg": cfg.optimizer,
-        "test_cfg": cfg.test,
-        "train_cfg": cfg.train,
-        "encoder": encoder,
-        "encoder_visualizer": encoder_visualizer,
-        "decoder": get_decoder(cfg.model.decoder, cfg.dataset),
-        "losses": get_losses(cfg.loss),
-        "step_tracker": step_tracker,
-    }
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = ModelWrapper.load_from_checkpoint(cfg.checkpointing.load, **model_kwargs, strict=False)
-    model = model.to(device)
-    model.eval()
+    # # mvsplat part
+    # encoder, encoder_visualizer = get_encoder(cfg.model.encoder)
+    # step_tracker = StepTracker()
+    # model_kwargs = {
+    #     "optimizer_cfg": cfg.optimizer,
+    #     "test_cfg": cfg.test,
+    #     "train_cfg": cfg.train,
+    #     "encoder": encoder,
+    #     "encoder_visualizer": encoder_visualizer,
+    #     "decoder": get_decoder(cfg.model.decoder, cfg.dataset),
+    #     "losses": get_losses(cfg.loss),
+    #     "step_tracker": step_tracker,
+    # }
+    # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    # model = ModelWrapper.load_from_checkpoint(cfg.checkpointing.load, **model_kwargs, strict=False)
+    # model = model.to(device)
+    # model.eval()
 
 
     Output_mvsplat = Path(cfg_dict.seva.save_dir)
@@ -770,7 +716,7 @@ def main(
         context_indices = split_ids["train_ids"]
         target_indices = split_ids["test_ids"]
         
-        start_time = time.time()
+   
         if num_frames < context_indices[1]+1:
             print(f"Skipping {scene_id} due to insufficient frames")
             continue
@@ -792,118 +738,118 @@ def main(
         context_dir.mkdir(parents=True, exist_ok=True)
 
         
-        coherent_masks = []
-        block_mask = None
-        meta = None
-        with torch.no_grad():
-            if hasattr(model, 'data_shim'):
-                batch = model.data_shim(batch)
-            b, v, _, h, w = batch["target"]["image"].shape
-            gaussians = model.encoder(batch["context"], 0, deterministic=False)
-            output = model.decoder.forward(
-                gaussians,
-                batch["target"]["extrinsics"],
-                batch["target"]["intrinsics"],
-                batch["target"]["near"],
-                batch["target"]["far"],
-                (h, w),
-                depth_mode=None,
-            )
-            rendered_images = output.color[0]
-            rgb_images = tensor_to_image(rendered_images)
+        # coherent_masks = []
+        # block_mask = None
+        # meta = None
+        # with torch.no_grad():
+        #     if hasattr(model, 'data_shim'):
+        #         batch = model.data_shim(batch)
+        #     b, v, _, h, w = batch["target"]["image"].shape
+        #     gaussians = model.encoder(batch["context"], 0, deterministic=False)
+        #     output = model.decoder.forward(
+        #         gaussians,
+        #         batch["target"]["extrinsics"],
+        #         batch["target"]["intrinsics"],
+        #         batch["target"]["near"],
+        #         batch["target"]["far"],
+        #         (h, w),
+        #         depth_mode=None,
+        #     )
+        #     rendered_images = output.color[0]
+        #     rgb_images = tensor_to_image(rendered_images)
 
-            blur_mask = blur_masks_from_numpy_batch(rgb_images)
-            blur_mask = torch.from_numpy((1-blur_mask).astype(np.float32)).to(device)
+        #     blur_mask = blur_masks_from_numpy_batch(rgb_images)
+        #     blur_mask = torch.from_numpy((1-blur_mask).astype(np.float32)).to(device)
             
 
 
             
-            alpha = output.alpha[0]
-            ground_truth_images = batch["target"]["image"][0]
-            context_images = batch["context"]["image"][0]
-            save_image(context_images[0], context_dir / "000.png")
-            save_image(context_images[1], context_dir / "100.png")
-            binary_mask = (alpha < 0.5).float()
+        #     alpha = output.alpha[0]
+        #     ground_truth_images = batch["target"]["image"][0]
+        #     context_images = batch["context"]["image"][0]
+            # save_image(context_images[0], context_dir / "000.png")
+            # save_image(context_images[1], context_dir / "100.png")
+        #     binary_mask = (alpha < 0.5).float()
             
-            img = Image.open(context_dir / "000.png").convert("RGB")
-            x = preprocess(img)                         
-            x = x.unsqueeze(0).to(device)           
-            with torch.no_grad():
-                f = clip_model.encode_image(x)        
-            f = torch.nn.functional.normalize(f, p=2, dim=-1)
+        #     img = Image.open(context_dir / "000.png").convert("RGB")
+        #     x = preprocess(img)                         
+        #     x = x.unsqueeze(0).to(device)           
+        #     with torch.no_grad():
+        #         f = clip_model.encode_image(x)        
+        #     f = torch.nn.functional.normalize(f, p=2, dim=-1)
 
-            f_vec = f.squeeze(0)
+        #     f_vec = f.squeeze(0)
 
 
-            sims = centers @ f_vec    
-            best_idx = sims.argmax().item()   
-            binary_mask = ((binary_mask + blur_mask) > 0).float() if best_idx != 1 else (binary_mask > 0).float
-
-            
-            coherent_mask = binary_mask.any(dim=0).unsqueeze(0).float()
-            coherent_mask = smooth_mask(coherent_mask)
-            
-
-            # Compute masked area ratio
-            masked_area = coherent_mask.mean().item() * 100
-            print(f"{masked_area:.2f}% of pixels masked")
+        #     sims = centers @ f_vec    
+        #     best_idx = sims.argmax().item()   
+        #     binary_mask = ((binary_mask + blur_mask) > 0).float() if best_idx != 1 else (binary_mask > 0).float
 
             
-            for i, (rendered, gt, a) in enumerate(
-                zip(rendered_images, ground_truth_images, alpha)
-            ):
-                # Save original rendered and GT
-                save_image(rendered, mvsplat_output / f"{target_indices[i]:03d}.png")
-                save_image(gt, groundtruth_output / f"{target_indices[i]:03d}.png")
+        #     coherent_mask = binary_mask.any(dim=0).unsqueeze(0).float()
+        #     coherent_mask = smooth_mask(coherent_mask)
+            
+
+        #     # Compute masked area ratio
+        #     masked_area = coherent_mask.mean().item() * 100
+        #     print(f"{masked_area:.2f}% of pixels masked")
+
+            
+        #     for i, (rendered, gt, a) in enumerate(
+        #         zip(rendered_images, ground_truth_images, alpha)
+        #     ):
+        #         # Save original rendered and GT
+        #         save_image(rendered, mvsplat_output / f"{target_indices[i]:03d}.png")
+        #         save_image(gt, groundtruth_output / f"{target_indices[i]:03d}.png")
 
 
 
             
-            coherent_mask_72 = (F.max_pool2d(coherent_mask, kernel_size=8,  stride=8,  ceil_mode=True) > 0).squeeze(0)
-            coherent_mask_36 = (F.max_pool2d(coherent_mask, kernel_size=16, stride=16, ceil_mode=True) > 0).squeeze(0)
-            coherent_mask_18 = (F.max_pool2d(coherent_mask, kernel_size=32, stride=32, ceil_mode=True) > 0).squeeze(0)
-            coherent_mask_9  = (F.max_pool2d(coherent_mask, kernel_size=64, stride=64, ceil_mode=True) > 0).squeeze(0)
-            # print(f"9 {coherent_mask_9.mean().item() * 100:.2f}% of pixels masked")
+        #     coherent_mask_72 = (F.max_pool2d(coherent_mask, kernel_size=8,  stride=8,  ceil_mode=True) > 0).squeeze(0)
+        #     coherent_mask_36 = (F.max_pool2d(coherent_mask, kernel_size=16, stride=16, ceil_mode=True) > 0).squeeze(0)
+        #     coherent_mask_18 = (F.max_pool2d(coherent_mask, kernel_size=32, stride=32, ceil_mode=True) > 0).squeeze(0)
+        #     coherent_mask_9  = (F.max_pool2d(coherent_mask, kernel_size=64, stride=64, ceil_mode=True) > 0).squeeze(0)
+        #     # print(f"9 {coherent_mask_9.mean().item() * 100:.2f}% of pixels masked")
             
-            coherent_masks.extend([coherent_mask_72, coherent_mask_36, coherent_mask_18, coherent_mask_9])
+        #     coherent_masks.extend([coherent_mask_72, coherent_mask_36, coherent_mask_18, coherent_mask_9])
 
             
-            if masked_area < 10.0 and masked_area > 0.0:
-                block_mask, meta = mask_to_block_mask_exact(coherent_mask_72)
-                print("block mask:", block_mask)
-                print("meta:", meta)
+        #     if masked_area < 10.0 and masked_area > 0.0:
+        #         block_mask, meta = mask_to_block_mask_exact(coherent_mask_72)
+        #         print("block mask:", block_mask)
+        #         print("meta:", meta)
             
                 
-            if masked_area > 85.0 or masked_area == 0.0:
-                coherent_masks = None
+        #     if masked_area > 85.0 or masked_area == 0.0:
+        #         coherent_masks = None
                 
  
-            musiq_mvsplat = musiq_metric(rendered_images.clamp_(0.0, 1.0)).detach().cpu().numpy().reshape(-1)    
-            musiq_context = musiq_metric(context_images.clamp_(0.0,1.0)).detach().cpu().numpy().reshape(-1)   
-            c0 = float(musiq_context[0]) 
-            c1 = float(musiq_context[1]) 
+        #     musiq_mvsplat = musiq_metric(rendered_images.clamp_(0.0, 1.0)).detach().cpu().numpy().reshape(-1)    
+        #     musiq_context = musiq_metric(context_images.clamp_(0.0,1.0)).detach().cpu().numpy().reshape(-1)   
+        #     c0 = float(musiq_context[0]) 
+        #     c1 = float(musiq_context[1]) 
 
-            # power interpolate
-            benchmark_np = power_ease_benchmark(c0,c1,t_targets, gamma=0.5)   
+        #     # power interpolate
+        #     benchmark_np = power_ease_benchmark(c0,c1,t_targets, gamma=0.5)   
 
-            x_ratio = musiq_mvsplat / benchmark_np
-            k_decision_curve = np.array([decide_k_curve(float(x), rules[best_idx]) for x in x_ratio], dtype=int).tolist()
-            # min_k = min(k_decision_curve)
-            if masked_area == 0.0:
-                k_decision_curve = [40] * VERSION_DICT["T"]
-                print("k:", k_decision_curve)
-            else:
-                k_decision_curve = [40] + k_decision_curve + [40]
+        #     x_ratio = musiq_mvsplat / benchmark_np
+        #     k_decision_curve = np.array([decide_k_curve(float(x), rules[best_idx]) for x in x_ratio], dtype=int).tolist()
+        #     # min_k = min(k_decision_curve)
+        #     if masked_area == 0.0:
+        #         k_decision_curve = [40] * VERSION_DICT["T"]
+        #         print("k:", k_decision_curve)
+        #     else:
+        #         k_decision_curve = [40] + k_decision_curve + [40]
  
-            mvsplat_latency = time.time() - start_time
-            print("mvsplat latency:", mvsplat_latency)
+        #     mvsplat_latency = time.time() - start_time
+        #     print("mvsplat latency:", mvsplat_latency)
 
 
         # SEVA
         start_time = time.time()
         scene = scene_true_dir
         # print("VERSION_DICT:",VERSION_DICT)
-        image_files = [os.path.join(mvsplat_output,f) for f in sorted(os.listdir(mvsplat_output)) if f.lower().endswith((".png", ".jpg", ".jpeg"))]
+        # image_files = [os.path.join(mvsplat_output,f) for f in sorted(os.listdir(mvsplat_output)) if f.lower().endswith((".png", ".jpg", ".jpeg"))]
         save_path_scene = out_mvsplat_dir / "pipeline"
         (
                     all_imgs_path,
@@ -923,7 +869,7 @@ def main(
             VERSION_DICT,
         )
         assert num_inputs is not None
-        all_imgs_path[1:-1] = image_files
+        # all_imgs_path[1:-1] = image_files
         image_cond = {
                     "img": all_imgs_path,
                     "input_indices": input_indices,
@@ -949,12 +895,8 @@ def main(
                     traj_prior_Ks=anchor_Ks,
                     traj_prior_c2ws=anchor_c2ws,
                     seed=seed,  
-                    mvsplt_image_list=image_files,
-                    # s = 0, 
-                    s = k_decision_curve,
-                    sparse_mask = coherent_masks,
-                    block_mask = block_mask,
-                    meta = meta
+                    s = 0, 
+
         )
         for _ in video_path_generator:
             pass
@@ -988,10 +930,9 @@ def main(
             Ks=Ks,
         )
         latency_data[scene_id] = {
-            "mvsplat_latency": float(mvsplat_latency),
             "seva_latency": float(seva_latency),
-            "total_latency": float(mvsplat_latency + seva_latency),
-            "s": k_decision_curve,
+            "total_latency": float(seva_latency),
+            "s": 0,
         }
     
         # Save after each scene (in case of interruption)
