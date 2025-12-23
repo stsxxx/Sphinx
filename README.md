@@ -6,7 +6,7 @@
 ## SEVA Experiments
 
 ```bash
-cd ../seva
+cd seva
 ```
 
 ## Install dependencies
@@ -22,6 +22,7 @@ conda activate sphinx_seva
 git clone https://github.com/Chrixtar/latent-gaussian-rasterization.git
 cd latent-gaussian-rasterization
 pip install -e .
+cd ..
 ```
 
 
