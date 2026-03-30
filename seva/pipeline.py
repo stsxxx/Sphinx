@@ -424,7 +424,7 @@ def load_custom_example(json_path, image_folder, context_indices, target_indices
     
     frames = data['frames']
     
-    if applied_transform in data:
+    if 'applied_transform' in data:
         # Top-level intrinsics (DL3DV often keeps these here)
         fl_x_top = data.get('fl_x', None)
         fl_y_top = data.get('fl_y', None)
